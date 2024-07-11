@@ -1,12 +1,31 @@
-const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
-const coords = '40.7128,-74.0060'; // New York City coordinates
-const radius = 5000; // 5 km radius
-const type = 'restaurant';
+import { milesToMeters } from "./utils.mjs";
 
-export async function fetchRestaurants() {
-    const response = await fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coords}&radius=${radius}&type=${type}&key=${apiKey}`);
-    const data = await response.json();
-    return data.results;
+const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
+//const coords = '40.7128,-74.0060'; // New York City coordinates for testing
+//const radius = 5000; // 5 km radius for testing
+const type = 'restaurant';
+const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+
+
+async function fetchRestaurants(range , location) {
+    const coords = getCoordinates(location);
+    console.log(`CoOrds: ${coords}`);
+    const radius = milesToMeters(range);
+    console.log(`Radius: ${radius}`)
+    const googlePlacesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coords}&radius=${radius}&type=${type}&key=${apiKey}`;
+    console.log(googlePlacesUrl)
+    const apiUrl = `${corsProxy}${googlePlacesUrl}`;
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data.results;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
 }
 
 export function pickRandomRestaurant(restaurants) {
@@ -14,9 +33,9 @@ export function pickRandomRestaurant(restaurants) {
     return restaurants[randomIndex];
 }
 
-export async function displayRandomRestaurant() {
+export async function displayRandomRestaurant(range, location) {
     try {
-        const restaurants = await fetchRestaurants();
+        const restaurants = await fetchRestaurants(range, location);
         const randomRestaurant = pickRandomRestaurant(restaurants);
         document.getElementById('restaurant-info').innerHTML = `
             <h2>${randomRestaurant.name}</h2>
@@ -30,4 +49,24 @@ export async function displayRandomRestaurant() {
     }
 }
 
+// Convert Address to coordinates
+export async function getCoordinates(address) {
+    const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
 
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data.status === 'OK') {
+            const location = data.results[0].geometry.location;
+            console.log(location);
+            document.getElementById('result').textContent = `Coordinates: Latitude ${location.lat}, Longitude ${location.lng}`;
+        } else {
+            document.getElementById('result').textContent = `Error: ${data.status}`;
+        }
+    } catch (error) {
+        console.error('Error fetching the coordinates:', error);
+        document.getElementById('result').textContent = 'Error fetching the coordinates';
+    }
+}
