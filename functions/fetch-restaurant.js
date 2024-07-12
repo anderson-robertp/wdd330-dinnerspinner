@@ -3,9 +3,9 @@ const axios = require('axios');
 exports.handler = async function(event, context) {
     const apiKey = process.env.VITE_GOOGLE_PLACES_API_KEY;
     const address = event.queryStringParameters.address;
-    const rangeInput = event.queryStringParameters.range;
+    const range = event.queryStringParameters.range;
 
-    const range = (rangeInput / 0.00062137).toFixed(0);
+    //const range = (rangeInput / 0.00062137).toFixed(0);
 
     if (!address || !range) {
         return {
