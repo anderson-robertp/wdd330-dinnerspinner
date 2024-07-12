@@ -8,6 +8,8 @@ const corsProxy = 'https://cors-anywhere.herokuapp.com/';
 
 
 async function fetchRestaurants(range , location) {
+    const currentUrl = window.location.hostname;
+    console.log(currentUrl);
     const coords = getCoordinates(location);
     console.log(`CoOrds: ${coords}`);
     const radius = milesToMeters(range);
@@ -60,8 +62,9 @@ export async function getCoordinates(address) {
         
         if (data.status === 'OK') {
             const location = data.results[0].geometry.location;
-            console.log(location);
-            document.getElementById('result').textContent = `Coordinates: Latitude ${location.lat}, Longitude ${location.lng}`;
+            const coords = `${location.lat},${location.lng}`;
+            return coords
+            console.log(coords);
         } else {
             document.getElementById('result').textContent = `Error: ${data.status}`;
         }
@@ -69,4 +72,5 @@ export async function getCoordinates(address) {
         console.error('Error fetching the coordinates:', error);
         document.getElementById('result').textContent = 'Error fetching the coordinates';
     }
+    return coords;
 }
