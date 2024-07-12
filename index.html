@@ -11,8 +11,15 @@
         <h1>Dinner Spinner</h1>
     </header>
     <main>
-        
         <div id="app">
+            <form>
+                <label for="address">Address:<input type="text" id="address" name="address"></label><br>
+                <label for="myRange">Range:<span id="range-display"></span></label>
+                <!--https://www.w3schools.com/howto/howto_js_rangeslider.asp-->
+                <div class="slide-container">
+                    <input type="range" min="1" max="100" value="10" class="slider" id="myRange">
+                </div>
+            </form>
             <button id="random-button">Pick a Random Restaurant</button>
             <div id="restaurant-info"></div>
         </div>
