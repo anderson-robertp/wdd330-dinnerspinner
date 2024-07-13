@@ -79,14 +79,15 @@ export async function getCoordinates(address) {
         if (data.status === 'OK') {
             const location = data.results[0].geometry.location;
             const coords = `${location.lat},${location.lng}`;
-            return coords
             console.log(coords);
+            return coords
         } else {
             document.getElementById('result').textContent = `Error: ${data.status}`;
         }
+        //return coords;
     } catch (error) {
         console.error('Error fetching the coordinates:', error);
         document.getElementById('result').textContent = 'Error fetching the coordinates';
     }
-    return coords;
+    //return coords;
 }
