@@ -1,23 +1,23 @@
-import { milesToMeters,reportError } from "./utils.mjs";
+import { milesToMeters, reportError } from "./utils.mjs";
 
 const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
-//const coords = '40.7128,-74.0060'; // New York City coordinates for testing
-//const radius = 5000; // 5 km radius for testing
-const type = 'rstaurant';
+const type = 'restaurant'; // Fixed typo
 const corsProxy = 'https://cors-anywhere.herokuapp.com/';
 
-
-async function fetchRestaurants(range , location) {
+// Fetch restaurants based on range and location
+async function fetchRestaurants(range, location) {
     const currentUrl = window.location.hostname;
-    console.log(currentUrl);
-    const coords = getCoordinates(location);
+    console.log(`Current URL: ${currentUrl}`);
+    const coords = await getCoordinates(location);
     const radius = milesToMeters(range);
-    console.log(`CoOrds: ${coords}`);
+    console.log(`Coordinates: ${coords}`);
     console.log(`Radius: ${radius}`);
-    if (currentUrl == "localhost") {
+
+    if (currentUrl === "localhost") {
         const googlePlacesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coords}&radius=${radius}&type=${type}&key=${apiKey}`;
-        console.log(googlePlacesUrl)
+        console.log(`Google Places URL: ${googlePlacesUrl}`);
         const apiUrl = `${corsProxy}${googlePlacesUrl}`;
+
         try {
             const response = await fetch(apiUrl);
             if (!response.ok) {
@@ -27,14 +27,12 @@ async function fetchRestaurants(range , location) {
             return data.results;
         } catch (error) {
             console.error('Error fetching data:', error);
-            //reportError(`Fetch Restaurant: ${error}`);
+            reportError(`Fetch Restaurant: ${error}`);
             throw error;
         }
     } else {
-        //const address = location;
-        //const radius = milesToMeters(range);
         try {
-            const response = await fetch(`/.netlify/functions/fetch-restaurant?address=${coords}&range=${radius}`); //
+            const response = await fetch(`/.netlify/functions/fetch-restaurant?address=${coords}&range=${radius}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -42,17 +40,19 @@ async function fetchRestaurants(range , location) {
             return data;
         } catch (error) {
             console.error('Error fetching data:', error);
-            //reportError(`Netlify Fetch: ${error}`)
+            reportError(`Netlify Fetch: ${error}`);
             throw error;
         }
-    }    
+    }
 }
 
+// Pick a random restaurant from the list
 export function pickRandomRestaurant(restaurants) {
     const randomIndex = Math.floor(Math.random() * restaurants.length);
     return restaurants[randomIndex];
 }
 
+// Display a randomly picked restaurant
 export async function displayRandomRestaurant(range, location) {
     try {
         const restaurants = await fetchRestaurants(range, location);
@@ -65,34 +65,31 @@ export async function displayRandomRestaurant(range, location) {
         `;
     } catch (error) {
         console.error('Error fetching restaurant data:', error);
-        //reportError(`Randon: ${error}`)
+        reportError(`Random: ${error}`);
         document.getElementById('restaurant-info').innerHTML = '<p>Sorry, something went wrong. Please try again later.</p>';
     }
 }
 
-// Convert Address to coordinates
+// Convert address to coordinates
 export async function getCoordinates(address) {
-    const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
     const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
 
     try {
         const response = await fetch(url);
         const data = await response.json();
-        
+
         if (data.status === 'OK') {
             const location = data.results[0].geometry.location;
             const coords = `${location.lat},${location.lng}`;
-            console.log(coords);
-            reportError(coords);
-            return coords
+            console.log(`Coordinates: ${coords}`);
+            return coords;
         } else {
+            console.error(`Error: ${data.status}`);
             document.getElementById('result').textContent = `Error: ${data.status}`;
         }
-        //return coords;
     } catch (error) {
         console.error('Error fetching the coordinates:', error);
-        //reportError(`CoOrds: ${error}`)
-        //document.getElementById('result').textContent = 'Error fetching the coordinates';
+        reportError(`Coordinates: ${error}`);
     }
-    //return coords;
+    return null; // Ensure a return value in case of error
 }
