@@ -4,4 +4,11 @@ export function milesToMeters(miles) {
     console.log(`Meters: ${meters}`);
     return meters.toFixed(0);
 }
-// 
+// Error Reporting
+
+export function reportError(error) {
+    const ul = document.getElementById("error-report");
+    const li = document.createElement("li");
+    li.textContent = error;
+    ul.appendChild(li);
+}

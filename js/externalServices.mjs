@@ -1,4 +1,4 @@
-import { milesToMeters } from "./utils.mjs";
+import { milesToMeters,reportError } from "./utils.mjs";
 
 const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
 //const coords = '40.7128,-74.0060'; // New York City coordinates for testing
@@ -27,6 +27,7 @@ async function fetchRestaurants(range , location) {
             return data.results;
         } catch (error) {
             console.error('Error fetching data:', error);
+            reportError(`Fetch Restaurant: ${error}`);
             throw error;
         }
     } else {
@@ -41,6 +42,7 @@ async function fetchRestaurants(range , location) {
             return data;
         } catch (error) {
             console.error('Error fetching data:', error);
+            reportError(`Netlify Fetch: ${error}`)
             throw error;
         }
     }    
@@ -63,6 +65,7 @@ export async function displayRandomRestaurant(range, location) {
         `;
     } catch (error) {
         console.error('Error fetching restaurant data:', error);
+        reportError(`Randon: ${error}`)
         document.getElementById('restaurant-info').innerHTML = '<p>Sorry, something went wrong. Please try again later.</p>';
     }
 }
@@ -80,6 +83,7 @@ export async function getCoordinates(address) {
             const location = data.results[0].geometry.location;
             const coords = `${location.lat},${location.lng}`;
             console.log(coords);
+            reportError(coords);
             return coords
         } else {
             document.getElementById('result').textContent = `Error: ${data.status}`;
@@ -87,7 +91,8 @@ export async function getCoordinates(address) {
         //return coords;
     } catch (error) {
         console.error('Error fetching the coordinates:', error);
-        document.getElementById('result').textContent = 'Error fetching the coordinates';
+        reportError(`CoOrds: ${error}`)
+        //document.getElementById('result').textContent = 'Error fetching the coordinates';
     }
     //return coords;
 }
