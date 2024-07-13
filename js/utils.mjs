@@ -9,6 +9,6 @@ export function milesToMeters(miles) {
 export function reportError(error) {
     const ul = document.getElementById("error-report");
     const li = document.createElement("li");
-    li.textContent = error;
+    li.textContent = `${error}`;
     ul.appendChild(li);
 }
