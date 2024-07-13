@@ -16,7 +16,7 @@ exports.handler = async function(event, context) {
 
     try {
         // Geocode the address to get coordinates
-        const geocodeResponse = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json`, {
+        /*const geocodeResponse = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json`, {
             params: {
                 address: address,
                 key: apiKey
@@ -25,10 +25,11 @@ exports.handler = async function(event, context) {
 
         if (geocodeResponse.data.status !== 'OK') {
             throw new Error('Error geocoding address');
-        }
+        }*/
 
-        const location = geocodeResponse.data.results[0].geometry.location;
-        const coords = `${location.lat},${location.lng}`;
+        //const location = geocodeResponse.data.results[0].geometry.location;
+        //const coords = `${location.lat},${location.lng}`;
+        const coords = address;
 
         // Fetch restaurants near the coordinates
         const placesResponse = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json`, {
