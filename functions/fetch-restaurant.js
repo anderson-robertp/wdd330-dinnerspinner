@@ -38,6 +38,7 @@ exports.handler = async function(event, context) {
                 radius: range,
                 type: 'restaurant',
                 key: apiKey
+                // add "opening_hours":{"open_now":true},
             }
         });
 

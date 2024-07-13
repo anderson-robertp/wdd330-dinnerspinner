@@ -19,6 +19,33 @@
                 <div class="slide-container">
                     <input type="range" min="1" max="100" value="10" class="slider" id="myRange">
                 </div>
+                <h2>Filter</h2>
+                <div id="price-filter">
+                    <h3>Price</h3>
+                    <input type="radio" id="any-price" name="price" value="any">
+                    <label for="price">Any</label><br>
+                    <input type="radio" id="low-price" name="price" value="1">
+                    <label for="price">$</label><br>
+                    <input type="radio" id="mid-price" name="price" value="2">
+                    <label for="price">$$</label><br>
+                    <input type="radio" id="high-price" name="price" value="3">
+                    <label for="price">$$$</label><br>
+                </div>
+                <div id="rating-filter">
+                    <h3>Rating</h3>
+                    <input type="radio" id="any-rating" name="price" value="any">
+                    <label for="price">Any</label><br>
+                    <input type="radio" id="1-rating" name="price" value="1">
+                    <label for="price">1</label><br>
+                    <input type="radio" id="2-rating" name="price" value="2">
+                    <label for="price">2</label><br>
+                    <input type="radio" id="3-rating" name="price" value="3">
+                    <label for="price">3</label><br>
+                    <input type="radio" id="4-rating" name="price" value="4">
+                    <label for="price">4</label><br>
+                    <input type="radio" id="5-rating" name="price" value="5">
+                    <label for="price">5</label><br>
+                </div>
             </form>
             <button id="random-button">Pick a Random Restaurant</button>
             <div id="restaurant-info"></div>

@@ -18,3 +18,7 @@ export function reportError(error) {
     li.textContent = error ? error : "Unknown error"; // Improved error message handling
     ul.appendChild(li);
 }
+
+// Filter by price point
+
+// Filter by rating
