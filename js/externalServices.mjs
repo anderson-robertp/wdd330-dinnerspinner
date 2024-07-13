@@ -33,7 +33,7 @@ async function fetchRestaurants(range , location) {
         //const address = location;
         //const radius = milesToMeters(range);
         try {
-            const response = await fetch(`/.netlify/functions/fetch-restaurants?address=${encodeURIComponent(coords)}&range=${radius}`);
+            const response = await fetch(`/.netlify/functions/fetch-restaurants?address=${coords}&range=${radius}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -70,7 +70,7 @@ export async function displayRandomRestaurant(range, location) {
 // Convert Address to coordinates
 export async function getCoordinates(address) {
     const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`;
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
 
     try {
         const response = await fetch(url);
