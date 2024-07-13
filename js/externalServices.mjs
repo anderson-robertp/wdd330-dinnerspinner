@@ -10,11 +10,11 @@ const corsProxy = 'https://cors-anywhere.herokuapp.com/';
 async function fetchRestaurants(range , location) {
     const currentUrl = window.location.hostname;
     console.log(currentUrl);
+    const coords = getCoordinates(location);
+    const radius = milesToMeters(range);
+    console.log(`CoOrds: ${coords}`);
+    console.log(`Radius: ${radius}`);
     if (currentUrl == "localhost") {
-        const coords = getCoordinates(location);
-        console.log(`CoOrds: ${coords}`);
-        const radius = milesToMeters(range);
-        console.log(`Radius: ${radius}`)
         const googlePlacesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coords}&radius=${radius}&type=${type}&key=${apiKey}`;
         console.log(googlePlacesUrl)
         const apiUrl = `${corsProxy}${googlePlacesUrl}`;
@@ -30,10 +30,10 @@ async function fetchRestaurants(range , location) {
             throw error;
         }
     } else {
-        const address = location;
-        const radius = milesToMeters(range);
+        //const address = location;
+        //const radius = milesToMeters(range);
         try {
-            const response = await fetch(`/.netlify/functions/fetch-restaurants?address=${encodeURIComponent(address)}&range=${radius}`);
+            const response = await fetch(`/.netlify/functions/fetch-restaurants?address=${encodeURIComponent(coords)}&range=${radius}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
