@@ -34,7 +34,7 @@ async function fetchRestaurants(range , location) {
         //const address = location;
         //const radius = milesToMeters(range);
         try {
-            const response = await fetch(`/.netlify/functions/fetch-restaurants?address=${coords}&range=${radius}`);
+            const response = await fetch(`/.netlify/functions/fetch-restaurants`); //?address=${coords}&range=${radius}
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
