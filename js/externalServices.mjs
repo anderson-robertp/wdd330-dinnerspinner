@@ -3,7 +3,7 @@ import { milesToMeters,reportError } from "./utils.mjs";
 const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
 //const coords = '40.7128,-74.0060'; // New York City coordinates for testing
 //const radius = 5000; // 5 km radius for testing
-const type = 'restaurant';
+const type = 'rstaurant';
 const corsProxy = 'https://cors-anywhere.herokuapp.com/';
 
 
@@ -27,14 +27,14 @@ async function fetchRestaurants(range , location) {
             return data.results;
         } catch (error) {
             console.error('Error fetching data:', error);
-            reportError(`Fetch Restaurant: ${error}`);
+            //reportError(`Fetch Restaurant: ${error}`);
             throw error;
         }
     } else {
         //const address = location;
         //const radius = milesToMeters(range);
         try {
-            const response = await fetch(`/.netlify/functions/fetch-restaurant`); //?address=${coords}&range=${radius}
+            const response = await fetch(`/.netlify/functions/fetch-restaurant?address=${coords}&range=${radius}`); //
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -42,7 +42,7 @@ async function fetchRestaurants(range , location) {
             return data;
         } catch (error) {
             console.error('Error fetching data:', error);
-            reportError(`Netlify Fetch: ${error}`)
+            //reportError(`Netlify Fetch: ${error}`)
             throw error;
         }
     }    
@@ -65,7 +65,7 @@ export async function displayRandomRestaurant(range, location) {
         `;
     } catch (error) {
         console.error('Error fetching restaurant data:', error);
-        reportError(`Randon: ${error}`)
+        //reportError(`Randon: ${error}`)
         document.getElementById('restaurant-info').innerHTML = '<p>Sorry, something went wrong. Please try again later.</p>';
     }
 }
@@ -91,7 +91,7 @@ export async function getCoordinates(address) {
         //return coords;
     } catch (error) {
         console.error('Error fetching the coordinates:', error);
-        reportError(`CoOrds: ${error}`)
+        //reportError(`CoOrds: ${error}`)
         //document.getElementById('result').textContent = 'Error fetching the coordinates';
     }
     //return coords;
