@@ -1,4 +1,5 @@
 import { displayRandomRestaurant } from "./js/externalServices.mjs";
+import { loadHeaderFooter } from "./js/utils.mjs";
 
 let slider = document.getElementById("myRange");
 let output = document.getElementById("range-display");
@@ -17,6 +18,7 @@ document.getElementById('random-button').addEventListener('click', function(even
     displayRandomRestaurant(range, address);
 });
 
+loadHeaderFooter();
 /*document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('app').innerHTML = `
         <button id="random-button">Pick a Random Restaurant</button>

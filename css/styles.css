@@ -1,3 +1,46 @@
+body {
+  background-color: #2D3047;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: white;
+  width: 80%;
+  margin: auto;
+}
+header {
+  background-color: #1B998B;
+  color: black;
+}
+h1 {
+  font-family: "Orbitron", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+  
+}
+footer {
+  background-color: #FF9B71;
+  color: black;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+main img {
+  width: 90%;
+  height: auto;
+  background: black;
+  animation: fade 2s;
+  padding: .25rem;
+}
+.hero {
+  display: inline;
+  width: 100%;
+  height: auto;
+}
+
 /* Slider */
 
 .slidecontainer {
@@ -37,4 +80,9 @@
     height: 25px; /* Slider handle height */
     background: #04AA6D; /* Green background */
     cursor: pointer; /* Cursor on hover */
+  }
+
+  .filter {
+    display: flex;
+    flex-direction: row;
   }

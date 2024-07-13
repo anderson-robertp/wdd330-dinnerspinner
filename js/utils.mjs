@@ -22,3 +22,46 @@ export function reportError(error) {
 // Filter by price point
 
 // Filter by rating
+
+export async function renderWithTemplate(templateFn, parentElement, data, callback, position = "afterbegin", clear = true) {
+    if (clear){
+      parentElement.innerHtml = "";
+    }
+  
+    const html = await templateFn();
+  
+    parentElement.insertAdjacentHTML(position, html);
+    if (callback) {
+      callback(data);
+    }
+  }
+
+  export async function loadHeaderFooter() {
+    const headerTemplateFn = loadTemplate("/partials/header.html");
+    const footerTemplateFn = loadTemplate("/partials/footer.html");
+    let mainHeader = document.querySelector("header");
+    let mainFooter = document.querySelector("footer");
+  
+    await renderWithTemplate(headerTemplateFn, mainHeader);
+    await renderWithTemplate(footerTemplateFn, mainFooter);
+  }
+
+  // retrieve data from localstorage
+export function getLocalStorage(key) {
+    return JSON.parse(localStorage.getItem(key));
+  }
+  // save data to local storage
+  export function setLocalStorage(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+  }
+
+  function loadTemplate(path) {
+    // this is called currying
+    return async function() {
+      const res = await fetch(path);
+      if (res.ok) {
+        const html = await res.text();
+        return html;
+      }
+    };
+  }
