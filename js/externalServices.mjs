@@ -5,7 +5,7 @@ const type = 'restaurant'; // Fixed typo
 const corsProxy = 'https://cors-anywhere.herokuapp.com/';
 
 // Fetch restaurants based on range and location
-async function fetchRestaurants(range, location) {
+async function fetchRestaurants(range, location, price, rating) {
     const currentUrl = window.location.hostname;
     console.log(`Current URL: ${currentUrl}`);
     const coords = await getCoordinates(location);
@@ -14,9 +14,10 @@ async function fetchRestaurants(range, location) {
     console.log(`Radius: ${radius}`);
 
     if (currentUrl === "localhost") {
-        const googlePlacesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coords}&radius=${radius}&type=${type}&key=${apiKey}`;
-        console.log(`Google Places URL: ${googlePlacesUrl}`);
-        const apiUrl = `${corsProxy}${googlePlacesUrl}`;
+        const googlePlacesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coords}&radius=${radius}&type=${type}&key=${apiKey}&opennow=true`;
+        //console.log(`Google Places URL: ${googlePlacesUrl}`);
+        const priceParam = price !== 'any' ? `&minprice=${price}&maxprice=${price}` : '';
+        const apiUrl = `${corsProxy}${googlePlacesUrl}${priceParam}`;
 
         try {
             const response = await fetch(apiUrl);
@@ -24,6 +25,12 @@ async function fetchRestaurants(range, location) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
+
+             // Filter results by rating if provided
+             if (rating !== 'any') {
+                data.results = data.results.filter(place => place.rating >= rating);
+            }
+
             return data.results;
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -32,7 +39,7 @@ async function fetchRestaurants(range, location) {
         }
     } else {
         try {
-            const response = await fetch(`/.netlify/functions/fetch-restaurant?address=${coords}&range=${radius}`);
+            const response = await fetch(`/.netlify/functions/fetch-restaurant?address=${coords}&range=${radius}&price=${price}&rating=${rating}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -53,9 +60,9 @@ export function pickRandomRestaurant(restaurants) {
 }
 
 // Display a randomly picked restaurant
-export async function displayRandomRestaurant(range, location) {
+export async function displayRandomRestaurant(range, location, price, rating) {
     try {
-        const restaurants = await fetchRestaurants(range, location);
+        const restaurants = await fetchRestaurants(range, location, price, rating);
         const randomRestaurant = pickRandomRestaurant(restaurants);
         document.getElementById('restaurant-info').innerHTML = `
             <h2>${randomRestaurant.name}</h2>
