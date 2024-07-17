@@ -93,3 +93,15 @@ export async function getCoordinates(address) {
     }
     return null; // Ensure a return value in case of error
 }
+
+// Login request
+export async function loginRequest(creds) {
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(creds),
+    };
+    return await fetch(baseURL + "/login", options).then(convertToJson);
+  }
