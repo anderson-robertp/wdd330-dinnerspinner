@@ -10,14 +10,17 @@ async function fetchRestaurants(range, location, price, rating) {
     console.log(`Current URL: ${currentUrl}`);
     const coords = await getCoordinates(location);
     const radius = milesToMeters(range);
-    console.log(`Coordinates: ${coords}`);
-    console.log(`Radius: ${radius}`);
+    //console.log(`Coordinates: ${coords}`);
+    //console.log(`Radius: ${radius}`);
+    console.log(`Received parameters: address=${coords}, range=${radius}, price=${price}, rating=${rating}`);
 
     if (currentUrl === "localhost") {
         const googlePlacesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coords}&radius=${radius}&type=${type}&key=${apiKey}&opennow=true`;
-        //console.log(`Google Places URL: ${googlePlacesUrl}`);
+        console.log(`Google Places URL: ${googlePlacesUrl}`);
         const priceParam = price !== 'any' ? `&minprice=${price}&maxprice=${price}` : '';
         const apiUrl = `${corsProxy}${googlePlacesUrl}${priceParam}`;
+
+        console.log(`${apiUrl}`);
 
         try {
             const response = await fetch(apiUrl);
@@ -30,7 +33,7 @@ async function fetchRestaurants(range, location, price, rating) {
              if (rating !== 'any') {
                 data.results = data.results.filter(place => place.rating >= rating);
             }
-
+            console.log(`Fetched ${data.results.length} places`);
             return data.results;
         } catch (error) {
             console.error('Error fetching data:', error);

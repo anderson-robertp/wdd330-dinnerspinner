@@ -22,7 +22,7 @@ document.getElementById('random-button').addEventListener('click', function(even
     // Get Rating
     const rating = document.querySelector('input[name="rating"]:checked').value;
     // Display
-    displayRandomRestaurant(range, address);
+    displayRandomRestaurant(range, address, price, rating);
 });
 
 loadHeaderFooter();
