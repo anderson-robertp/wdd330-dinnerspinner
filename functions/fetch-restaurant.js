@@ -8,6 +8,7 @@ exports.handler = async function(event, context) {
     const rating = event.queryStringParameters.ratng;
 
     //const range = (rangeInput / 0.00062137).toFixed(0);
+    console.log(`Received parameters: address=${address}, range=${range}, price=${price}, rating=${rating}`);
 
     if (!address || !range) {
         return {
@@ -22,6 +23,8 @@ exports.handler = async function(event, context) {
             googlePlacesUrl += `&minprice=${price}&maxprice=${price}`;
         }
 
+        console.log(`Google Places URL: ${googlePlacesUrl}`);
+
         const response = await fetch(googlePlacesUrl);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -33,6 +36,8 @@ exports.handler = async function(event, context) {
         if (rating !== 'any') {
             data.results = data.results.filter(place => place.rating >= rating);
         }
+
+        console.log(`Fetched ${data.results.length} places`);
 
         return {
             statusCode: 200,
