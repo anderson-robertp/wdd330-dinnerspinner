@@ -32,7 +32,8 @@
         
         <div id="app">
             <form>
-                <label for="address">Address:<input type="text" id="address" name="address"></label><br>
+                <label for="address">Address:<input type="text" id="address" name="address" autocomplete="shipping street-address"></label><br>
+                <!--https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete#values-->
                 <label for="myRange">Range:<span id="range-display"></span> miles</label>
                 <!--https://www.w3schools.com/howto/howto_js_rangeslider.asp-->
                 <div class="slide-container">
@@ -45,27 +46,34 @@
 
                         <h3>Price</h3><br>
                         <input type="radio" id="any-price" name="price" value="any" checked="checked">
-                        <label for="price">Any</label><br>
+                        <label for="any-price">Any</label><br>
+
                         <input type="radio" id="low-price" name="price" value="1">
-                        <label for="price">$</label><br>
+                        <label for="low-price">$</label><br>
+
                         <input type="radio" id="mid-price" name="price" value="2">
-                        <label for="price">$$</label><br>
+                        <label for="mid-price">$$</label><br>
+
                         <input type="radio" id="high-price" name="price" value="3">
-                        <label for="price">$$$</label><br>
+                        <label for="high-price">$$$</label><br>
                     </div>
                     
                     <div id="rating-filter">
                         <h3>Rating</h3><br>
                         <input type="radio" id="any-rating" name="rating" value="any" checked="checked">
-                        <label for="price">Any</label><br>
+                        <label for="any-rating">Any</label><br>
+
                         <input type="radio" id="2-rating" name="rating" value="2">
-                        <label for="price">2 and above</label><br>
+                        <label for="2-rating">2 and above</label><br>
+
                         <input type="radio" id="3-rating" name="rating" value="3">
-                        <label for="price">3 and above</label><br>
+                        <label for="3-rating">3 and above</label><br>
+
                         <input type="radio" id="4-rating" name="rating" value="4">
-                        <label for="price">4 and above</label><br>
-                        <input type="radio" id="4-rating" name="rating" value="5">
-                        <label for="price">5</label><br>
+                        <label for="4-rating">4 and above</label><br>
+
+                        <input type="radio" id="5-rating" name="rating" value="5">
+                        <label for="5-rating">5</label><br>
                     </div>
                 </section>
             </form>

@@ -1,9 +1,11 @@
-const axios = require('axios');
+const fetch = require('node-fetch');
 
 exports.handler = async function(event, context) {
     const apiKey = process.env.VITE_GOOGLE_PLACES_API_KEY;
-    const address = event.queryStringParameters.address;
+    const coords = event.queryStringParameters.address;
     const range = event.queryStringParameters.range;
+    const price = event.queryStringParameters.price;
+    const rating = event.queryStringParameters.ratng;
 
     //const range = (rangeInput / 0.00062137).toFixed(0);
 
@@ -15,23 +17,33 @@ exports.handler = async function(event, context) {
     }
 
     try {
-        // Geocode the address to get coordinates
-        /*const geocodeResponse = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json`, {
-            params: {
-                address: address,
-                key: apiKey
-            }
-        });
-
-        if (geocodeResponse.data.status !== 'OK') {
-            throw new Error('Error geocoding address');
+        let googlePlacesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coords}&radius=${radius}&type=restaurant&opennow=true&key=${apiKey}`;
+        if (price !== 'any') {
+            googlePlacesUrl += `&minprice=${price}&maxprice=${price}`;
         }
 
-        const location = geocodeResponse.data.results[0].geometry.location;
-        const coords = `${location.lat},${location.lng}`;*/
-        const coords = address;
+        const response = await fetch(googlePlacesUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-        // Fetch restaurants near the coordinates
+        let data = await response.json();
+        
+        // Filter results by rating if provided
+        if (rating !== 'any') {
+            data.results = data.results.filter(place => place.rating >= rating);
+        }
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify(data.results),
+        };
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: error.message }),
+        /* // Fetch restaurants near the coordinates
         const placesResponse = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json`, {
             params: {
                 location: coords,
@@ -50,7 +62,7 @@ exports.handler = async function(event, context) {
         console.error('Error fetching data:', error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: 'Error fetching restaurant data' })
+            body: JSON.stringify({ error: 'Error fetching restaurant data' })*/
         };
     }
 };

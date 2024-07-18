@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Translator</title>
+    <title>Login</title>
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,21 +13,19 @@
 <body>
     <header class="main-header"></header>
     <main>
-        <h2>Typical Answers for the question "Where to eat?", Translated.</h2>
-        <p>
-            "I don't know, you pick."<br>
-            "Anything is fine."<br>
-            "I'm not really hungry, but I'll go wherever you want."<br>
-            "I could eat."<br>
-            "What do you feel like having?"<br>
-            "Let's go somewhere we haven't been before."<br>
-            "Surprise me!"<br>
-            "I'm craving something, but I don't know what."<br>
-            "As long as it's not [specific cuisine/restaurant], I'm good."<br>
-            "How about our usual spot?"<br>
-        </p>
+        <h1>Login</h1>
+        <form action="sumbit">
+            <!--Email-->
+            <label for="email">Email:</label>
+            <input id="email" name="email" type="text" required /><br>
+            <!--Password-->
+            <label for="password">Password:</label>
+            <input id="password" name="password" type="password" required /><br>
+            <!--Submit-->
+            <button id="loginButton" type="submit">Login</button>
+        </form>
     </main>
     <footer class="main-footer"></footer>
-    <script src="/js/translator.js" type="module"></script>
+    <script src="/js/login.js" type="module"></script>
 </body>
 </html>

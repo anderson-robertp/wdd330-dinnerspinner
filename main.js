@@ -13,8 +13,15 @@ slider.oninput = function() {
 
 document.getElementById('random-button').addEventListener('click', function(event){
     event.preventDefault();
+    // Get Address
     const address = document.getElementById('address').value;
+    // Get Range
     const range = slider.value;
+    // Get Price
+    const price = document.querySelector('input[name="price"]:checked').value;
+    // Get Rating
+    const rating = document.querySelector('input[name="rating"]:checked').value;
+    // Display
     displayRandomRestaurant(range, address);
 });
 

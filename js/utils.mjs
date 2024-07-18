@@ -56,7 +56,6 @@ export function getLocalStorage(key) {
   }
 
   function loadTemplate(path) {
-    // this is called currying
     return async function() {
       const res = await fetch(path);
       if (res.ok) {
@@ -64,4 +63,12 @@ export function getLocalStorage(key) {
         return html;
       }
     };
+  }
+
+  // Get Parameter
+  export function getParam(param) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const product = urlParams.get(param) 
+    return product;
   }
