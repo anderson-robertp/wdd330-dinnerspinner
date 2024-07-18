@@ -14,7 +14,7 @@ async function fetchRestaurants(range, location, price, rating) {
     //console.log(`Radius: ${radius}`);
     console.log(`Received parameters: address=${coords}, range=${radius}, price=${price}, rating=${rating}`);
 
-    if (currentUrl === "localhost") {
+    if (currentUrl === "notlocalhost") {
         const googlePlacesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coords}&radius=${radius}&type=${type}&key=${apiKey}&opennow=true`;
         console.log(`Google Places URL: ${googlePlacesUrl}`);
         const priceParam = price !== 'any' ? `&minprice=${price}&maxprice=${price}` : '';

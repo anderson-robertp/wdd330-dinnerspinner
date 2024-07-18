@@ -1,16 +1,16 @@
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
 exports.handler = async function(event, context) {
     const apiKey = process.env.VITE_GOOGLE_PLACES_API_KEY;
     const coords = event.queryStringParameters.address;
     const range = event.queryStringParameters.range;
     const price = event.queryStringParameters.price;
-    const rating = event.queryStringParameters.ratng;
+    const rating = event.queryStringParameters.rating;
 
     //const range = (rangeInput / 0.00062137).toFixed(0);
-    console.log(`Received parameters: address=${address}, range=${range}, price=${price}, rating=${rating}`);
+    console.log(`Received parameters: address=${coords}, range=${range}, price=${price}, rating=${rating}`);
 
-    if (!address || !range) {
+    if (!coords || !range) {
         return {
             statusCode: 400,
             body: JSON.stringify({ error: 'Address and range are required parameters' })
@@ -18,7 +18,7 @@ exports.handler = async function(event, context) {
     }
 
     try {
-        let googlePlacesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coords}&radius=${radius}&type=restaurant&opennow=true&key=${apiKey}`;
+        let googlePlacesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coords}&radius=${range}&type=restaurant&opennow=true&key=${apiKey}`;
         if (price !== 'any') {
             googlePlacesUrl += `&minprice=${price}&maxprice=${price}`;
         }
