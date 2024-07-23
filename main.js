@@ -1,5 +1,7 @@
 import { displayRandomRestaurant } from "./js/externalServices.mjs";
-import { loadHeaderFooter } from "./js/utils.mjs";
+import { loadHeaderFooter, setLocalStorage } from "./js/utils.mjs";
+import { setPreferences } from "./js/prefer.mjs";
+import { displayAlerts } from "./js/alert.mjs";
 
 let slider = document.getElementById("myRange");
 let output = document.getElementById("range-display");
@@ -23,6 +25,29 @@ document.getElementById('random-button').addEventListener('click', function(even
     const rating = document.querySelector('input[name="rating"]:checked').value;
     // Display
     displayRandomRestaurant(range, address, price, rating);
+    const prefer = document.getElementById('smash-pass');
+    prefer.style.display = "flex"
+
+});
+
+document.getElementById('smash').addEventListener('click', function(event){
+    const restaurant = document.getElementById('restaurant-name');
+    setPreferences("like",restaurant);
+    displayAlerts("Added to you list of likes.");
+});
+
+document.getElementById('pass').addEventListener('click', function(event){
+    const restaurant = document.getElementById('restaurant-name');
+    setPreferences("dislike",restaurant);
+    displayAlerts("Added to you list of dislikes.");
+});
+
+document.getElementById('reset').addEventListener('click', function(event){
+    document.getElementById('address').value = '';
+    slider.value = 10;
+    document.querySelector('input[id="any-price"]:checked').value = "checked";
+    document.querySelector('input[name="any-rating"]:checked').value = "checked";
+    setLocalStorage("so-restaurants","");
 });
 
 loadHeaderFooter();

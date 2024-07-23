@@ -1,5 +1,7 @@
 import { jwtDecode } from "jwt-decode";
+import { loginRequest } from "./externalServices.mjs";
 import { getLocalStorage,setLocalStorage } from "./utils.mjs";
+import { displayAlerts } from "./alert.mjs";
 
 export async function login(email, password, redirect = "/") {
     // Create header
@@ -23,6 +25,7 @@ export function isTokenValid(token) {
         if (decoded.exp * 1000 < currentDate.getTime()) {
             //token expiration has passed
             console.log("Token expired.");
+            displayAlerts("Token Invalid")
             return false;
         } else {
             // token not expired

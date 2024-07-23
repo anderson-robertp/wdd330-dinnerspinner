@@ -87,6 +87,10 @@ main img {
     flex-direction: row;
   }
 
+#smash-pass {
+  display: none;
+}
+
   /* Pop up */
 
 /* Style for the pop-up overlay */

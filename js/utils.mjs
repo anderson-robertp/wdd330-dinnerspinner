@@ -72,3 +72,11 @@ export function getLocalStorage(key) {
     const product = urlParams.get(param) 
     return product;
   }
+
+  export function displayRestaurant(element,restaurant) {
+    element.innerHTML = `
+            <h2 id="restaurant-name">${restaurant.name}</h2>
+            <p>${restaurant.vicinity}</p>
+            <p>Rating: ${restaurant.rating}</p>
+            <a href="https://www.google.com/maps/search/?api=1&query=${restaurant.name}&query_place_id=${restaurant.place_id}" target="_blank">View on Google Maps</a>`;
+  }

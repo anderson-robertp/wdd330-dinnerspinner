@@ -1,8 +1,10 @@
-import { milesToMeters, reportError } from "./utils.mjs";
+import { getLocalStorage, setLocalStorage, milesToMeters, reportError, displayRestaurant } from "./utils.mjs";
+import { displayAlerts } from "./alert.mjs";
 
 const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
-const type = 'restaurant'; // Fixed typo
-const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+//const type = 'restaurant'; // Fixed typo
+//const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+const baseURL = import.meta.env.VITE_SERVER_URL;
 
 // Fetch restaurants based on range and location
 async function fetchRestaurants(range, location, price, rating) {
@@ -12,49 +14,23 @@ async function fetchRestaurants(range, location, price, rating) {
     const radius = milesToMeters(range);
     //console.log(`Coordinates: ${coords}`);
     //console.log(`Radius: ${radius}`);
-    console.log(`Received parameters: address=${coords}, range=${radius}, price=${price}, rating=${rating}`);
-
-    if (currentUrl === "notlocalhost") {
-        const googlePlacesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coords}&radius=${radius}&type=${type}&key=${apiKey}&opennow=true`;
-        console.log(`Google Places URL: ${googlePlacesUrl}`);
-        const priceParam = price !== 'any' ? `&minprice=${price}&maxprice=${price}` : '';
-        const apiUrl = `${corsProxy}${googlePlacesUrl}${priceParam}`;
-
-        console.log(`${apiUrl}`);
-
-        try {
-            const response = await fetch(apiUrl);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-
-             // Filter results by rating if provided
-             if (rating !== 'any') {
-                data.results = data.results.filter(place => place.rating >= rating);
-            }
-            console.log(`Fetched ${data.results.length} places`);
-            return data.results;
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            reportError(`Fetch Restaurant: ${error}`);
-            throw error;
+    //console.log(`Received parameters: address=${coords}, range=${radius}, price=${price}, rating=${rating}`)
+    
+    try {
+        //console.log("Googling restautants");
+        const response = await fetch(`/.netlify/functions/fetch-restaurant?address=${coords}&range=${radius}&price=${price}&rating=${rating}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-    } else {
-        try {
-            const response = await fetch(`/.netlify/functions/fetch-restaurant?address=${coords}&range=${radius}&price=${price}&rating=${rating}`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            reportError(`Netlify Fetch: ${error}`);
-            throw error;
-        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        displayAlerts(`Netlify Fetch: ${error}`);
+        throw error;
     }
 }
+
 
 // Pick a random restaurant from the list
 export function pickRandomRestaurant(restaurants) {
@@ -64,20 +40,29 @@ export function pickRandomRestaurant(restaurants) {
 
 // Display a randomly picked restaurant
 export async function displayRandomRestaurant(range, location, price, rating) {
-    try {
-        const restaurants = await fetchRestaurants(range, location, price, rating);
-        const randomRestaurant = pickRandomRestaurant(restaurants);
-        document.getElementById('restaurant-info').innerHTML = `
-            <h2>${randomRestaurant.name}</h2>
-            <p>${randomRestaurant.vicinity}</p>
-            <p>Rating: ${randomRestaurant.rating}</p>
-            <a href="https://www.google.com/maps/search/?api=1&query=${randomRestaurant.name}&query_place_id=${randomRestaurant.place_id}" target="_blank">View on Google Maps</a>
-        `;
-    } catch (error) {
-        console.error('Error fetching restaurant data:', error);
-        reportError(`Random: ${error}`);
-        document.getElementById('restaurant-info').innerHTML = '<p>Sorry, something went wrong. Please try again later.</p>';
+    const localStorage = getLocalStorage("so-restaurants");
+    if (localStorage.length === 0) {
+        try {
+            console.log("Picking a restaurant from google.")
+            const restaurants = await fetchRestaurants(range, location, price, rating);
+            setLocalStorage("so-restaurants",restaurants)
+            const randomRestaurant = pickRandomRestaurant(restaurants);
+            const element = document.getElementById('restaurant-info');
+            displayRestaurant(element,randomRestaurant);
+            displayAlerts("Picked from Google.")
+        } catch (error) {
+            console.error('Error fetching restaurant data:', error);
+            displayAlerts(`Random: ${error}`);
+            document.getElementById('restaurant-info').innerHTML = '<p>Sorry, something went wrong. Please try again later.</p>';
+        }
+    } else {
+        console.log("Picking a restaurant form local storage");
+        const element = document.getElementById('restaurant-info');
+        const randomRestaurant =pickRandomRestaurant(localStorage);
+        displayRestaurant(element, randomRestaurant);
+        displayAlerts("Restaurant Picked from Local Storage");
     }
+    
 }
 
 // Convert address to coordinates
@@ -113,5 +98,17 @@ export async function loginRequest(creds) {
       },
       body: JSON.stringify(creds),
     };
-    return await fetch(baseURL + "/login", options).then(convertToJson);
+    return await fetch(baseURL + "login", options).then(convertToJson);
+  }
+
+  async function convertToJson(res) {
+    const jsonResponse = await res.json();
+    
+    if (res.ok) {
+      return jsonResponse;
+    } else {
+      console.log("test " + jsonResponse);
+      //throw { name: "servicesError", message: jsonResponse };
+      displayAlerts(jsonResponse);
+    }
   }
