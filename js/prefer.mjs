@@ -1,17 +1,22 @@
 import { getLocalStorage, setLocalStorage, displayRestaurant } from "./utils.mjs";
 
-export function setPreferences(type, restaurant){
+export function setPreferences(type, restaurant) {
     const query = "so-" + type;
     let list = getLocalStorage(query) || [];
-    list.append(restaurant);
-    setLocalStorage(query, list);
+    list.push(restaurant); // 
+    setLocalStorage(query, list); // Update local storage
 }
 
 export function displayPreferences(type) {
     const query = "so-" + type;
     let list = getLocalStorage(query) || [];
     const element = document.getElementById(type);
-    list.forEach(i => {
-        displayRestaurant(element,i);
-    });
+
+    if (element) { // Check if element exists
+        list.forEach(restaurant => {
+            displayRestaurant(element, restaurant); // 
+        });
+    } else {
+        console.error(`Element with id "${type}" not found.`);
+    }
 }
