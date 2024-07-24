@@ -69,14 +69,17 @@ export function getLocalStorage(key) {
   export function getParam(param) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const product = urlParams.get(param) 
-    return product;
+    const term = urlParams.get(param) 
+    return term;
   }
 
   export function displayRestaurant(element,restaurant) {
-    element.innerHTML = `
+    const div = document.createElement("div");
+    div.classList.add("rest-card");
+    div.innerHTML = `
             <h2 id="restaurant-name">${restaurant.name}</h2>
             <p>${restaurant.vicinity}</p>
             <p>Rating: ${restaurant.rating}</p>
             <a href="https://www.google.com/maps/search/?api=1&query=${restaurant.name}&query_place_id=${restaurant.place_id}" target="_blank">View on Google Maps</a>`;
+    element.appendChild(div);
   }

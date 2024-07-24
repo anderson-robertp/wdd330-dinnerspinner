@@ -40,7 +40,7 @@ export function pickRandomRestaurant(restaurants) {
 
 // Display a randomly picked restaurant
 export async function displayRandomRestaurant(range, location, price, rating) {
-    const localStorage = getLocalStorage("so-restaurants");
+    const localStorage = getLocalStorage("so-restaurants") || [];
     if (localStorage.length === 0) {
         try {
             console.log("Picking a restaurant from google.")

@@ -31,13 +31,13 @@ document.getElementById('random-button').addEventListener('click', function(even
 });
 
 document.getElementById('smash').addEventListener('click', function(event){
-    const restaurant = document.getElementById('restaurant-name');
+    const restaurant = document.getElementById('restaurant-name').textContent;
     setPreferences("like",restaurant);
     displayAlerts("Added to you list of likes.");
 });
 
 document.getElementById('pass').addEventListener('click', function(event){
-    const restaurant = document.getElementById('restaurant-name');
+    const restaurant = document.getElementById('restaurant-name').textContent;
     setPreferences("dislike",restaurant);
     displayAlerts("Added to you list of dislikes.");
 });

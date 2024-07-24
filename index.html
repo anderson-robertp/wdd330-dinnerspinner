@@ -11,25 +11,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="main-header">
-        <!--<div class="hero">
-            <picture>
-                <img src="/images/hero-large.webp" loading="lazy" alt="People on devices trying to decide on dinner">
-            </picture>
-        </div>
-        <h1>Dinner Spinner</h1>
-        <nav>
-            <a href="#" class="active">Home</a>
-            <a href="translator/index.html">Translator</a>
-            <a href="user/preferences.html">Preferences</a>
-        </nav>
-        <div class="user">
-            <button>Login</button>
-            <button>Register</button>
-        </div>-->
-    </header>
+    <header class="main-header"></header>
     <main>
-        
         <div id="app">
             <form>
                 <label for="address">Address:<input type="text" id="address" name="address" autocomplete="shipping street-address"></label><br>
@@ -39,41 +22,46 @@
                 <div class="slide-container">
                     <input type="range" min="1" max="100" value="10" class="slider" id="myRange">
                 </div>
-                <h2>Filter</h2>
+               
                 <section class="filter">
-                    
+                    <h2>Filter</h2>
                     <div id="price-filter">
 
-                        <h3>Price</h3><br>
-                        <input type="radio" id="any-price" name="price" value="any" checked="checked">
-                        <label for="any-price">Any</label><br>
+                        <h3>Price</h3>
+                        <div id="price-input">
+                            <input type="radio" id="any-price" name="price" value="any" checked="checked">
+                            <label for="any-price">Any</label><br>
 
-                        <input type="radio" id="low-price" name="price" value="1">
-                        <label for="low-price">$</label><br>
+                            <input type="radio" id="low-price" name="price" value="1">
+                            <label for="low-price">$</label><br>
 
-                        <input type="radio" id="mid-price" name="price" value="2">
-                        <label for="mid-price">$$</label><br>
+                            <input type="radio" id="mid-price" name="price" value="2">
+                            <label for="mid-price">$$</label><br>
 
-                        <input type="radio" id="high-price" name="price" value="3">
-                        <label for="high-price">$$$</label><br>
+                            <input type="radio" id="high-price" name="price" value="3">
+                            <label for="high-price">$$$</label><br>
+                        </div>
                     </div>
                     
                     <div id="rating-filter">
-                        <h3>Rating</h3><br>
-                        <input type="radio" id="any-rating" name="rating" value="any" checked="checked">
-                        <label for="any-rating">Any</label><br>
+                        <h3>Rating</h3>
+                        <div id="rating-input">
+                            <input type="radio" id="any-rating" name="rating" value="any" checked="checked">
+                            <label for="any-rating">Any</label><br>
 
-                        <input type="radio" id="2-rating" name="rating" value="2">
-                        <label for="2-rating">2 and above</label><br>
+                            <input type="radio" id="2-rating" name="rating" value="2">
+                            <label for="2-rating">2 and above</label><br>
 
-                        <input type="radio" id="3-rating" name="rating" value="3">
-                        <label for="3-rating">3 and above</label><br>
+                            <input type="radio" id="3-rating" name="rating" value="3">
+                            <label for="3-rating">3 and above</label><br>
 
-                        <input type="radio" id="4-rating" name="rating" value="4">
-                        <label for="4-rating">4 and above</label><br>
+                            <input type="radio" id="4-rating" name="rating" value="4">
+                            <label for="4-rating">4 and above</label><br>
 
-                        <input type="radio" id="5-rating" name="rating" value="5">
-                        <label for="5-rating">5</label><br>
+                            <input type="radio" id="5-rating" name="rating" value="5">
+                            <label for="5-rating">5</label><br>
+                        </div>
+                        
                     </div>
                 </section>
             </form>
